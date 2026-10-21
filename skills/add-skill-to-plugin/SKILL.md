@@ -1,11 +1,11 @@
 ---
 name: add-skill-to-plugin
-description: Use when Daniel wants to add a new skill to the Israel-Agent-Skills-Plugin repo based on rough / raw notes he pastes into the chat. Takes unstructured bullet points, URLs, field notes, Hebrew snippets and example pages, and turns them into a well-formed `skills/<skill-name>/SKILL.md` file that matches the conventions of existing skills in this repo (YAML frontmatter with `name` + rich `description` including trigger phrases, then a structured markdown body). Also syncs the new skill into the local plugin cache at `~/.claude/plugins/cache/danielrosehill/israel-agent-skills/<version>/skills/` so it is usable immediately, commits, and pushes. Trigger phrases: "add a skill to this plugin", "new skill for israel-agent-skills", "turn these notes into a skill", "scaffold a skill from my raw notes", "save this as a skill in the repo".
+description: Use when Daniel wants to add a new skill to the Israel-Agent-Skills-Plugin repo based on rough / raw notes he pastes into the chat. Takes unstructured bullet points, URLs, field notes, Hebrew snippets and example pages, and turns them into a well-formed `skills/<skill-name>/SKILL.md` file that matches the conventions of existing skills in this repo (YAML frontmatter with `name` + rich `description` including trigger phrases, then a structured markdown body). Commits and pushes, then syncs the plugin catalogue so the skill is discoverable at once. Trigger phrases: "add a skill to this plugin", "new skill for israel-agent-skills", "turn these notes into a skill", "scaffold a skill from my raw notes", "save this as a skill in the repo".
 ---
 
 # Add a Skill to Israel-Agent-Skills-Plugin
 
-Meta-skill that converts Daniel's rough notes into a properly structured skill file inside this repo and activates it locally.
+Meta-skill that converts Daniel's rough notes into a properly structured skill file inside this repo and makes it discoverable through the plugin catalogue.
 
 ## When to invoke
 
@@ -59,21 +59,15 @@ skills/
    - Frontmatter `name` + dense `description` with trigger phrases.
    - Body sections drawn from the notes, with Hebrew labels preserved verbatim.
    - Explicit "not inferred from notes" markers where notes were silent.
-5. **Sync to local cache** so the skill is active in the user's current Claude Code session without a reinstall:
-   ```bash
-   VER=$(jq -r .version /home/daniel/repos/github/ai-agents-and-prompts/ai-claude-plugins/Claude-Israel-Agent-Skills-Plugin/.claude-plugin/plugin.json)
-   CACHE=/home/daniel/.claude/plugins/cache/danielrosehill/israel-agent-skills/$VER/skills
-   cp -r /home/daniel/repos/github/ai-agents-and-prompts/ai-claude-plugins/Claude-Israel-Agent-Skills-Plugin/skills/<new-skill> "$CACHE"/
-   ```
-   If the cache dir for that version doesn't exist, skip the sync and tell Daniel — it means the plugin hasn't been installed from the marketplace at that version yet.
-6. **Commit and push** from the repo root:
+5. **Commit and push** from the repo root:
    ```bash
    git add -A
    git commit -m "Add <new-skill> skill\n\n<one-line summary>"
    git push
    ```
    Per Daniel's global git rules: always commit all pending changes and push immediately. Do not create feature branches — this repo uses `master` directly.
-7. **Report back** with: the new skill path, the commit hash, whether the local cache sync succeeded, and any gaps in the notes that the SKILL.md flagged as unknown.
+6. **Make it discoverable.** Plugins aren't installed on Daniel's machines; skills are read from the plugin catalogue (`~/CLAUDE.md` § Skills). Run `mcp__gateway__catalogue__sync` with `plugin: israel-agent-skills`, then `mcp__gateway__catalogue__read` on `skill:israel-agent-skills/<new-skill>` and check that it resolves.
+7. **Report back** with: the new skill path, the commit hash, whether the catalogue read succeeded, and any gaps in the notes that the SKILL.md flagged as unknown.
 
 ## Optional follow-ups (ask before doing)
 
