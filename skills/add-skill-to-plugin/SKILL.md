@@ -21,7 +21,7 @@ Do not wait for a clean spec — these notes are the input.
 
 ## Repo conventions (match these)
 
-Plugin root: `/home/daniel/repos/github/my-repos/Israel-Agent-Skills-Plugin/`
+Plugin root: `/home/daniel/repos/github/ai-agents-and-prompts/ai-claude-plugins/Claude-Israel-Agent-Skills-Plugin/`
 
 Layout:
 
@@ -61,9 +61,9 @@ skills/
    - Explicit "not inferred from notes" markers where notes were silent.
 5. **Sync to local cache** so the skill is active in the user's current Claude Code session without a reinstall:
    ```bash
-   VER=$(jq -r .version /home/daniel/repos/github/my-repos/Israel-Agent-Skills-Plugin/.claude-plugin/plugin.json)
+   VER=$(jq -r .version /home/daniel/repos/github/ai-agents-and-prompts/ai-claude-plugins/Claude-Israel-Agent-Skills-Plugin/.claude-plugin/plugin.json)
    CACHE=/home/daniel/.claude/plugins/cache/danielrosehill/israel-agent-skills/$VER/skills
-   cp -r /home/daniel/repos/github/my-repos/Israel-Agent-Skills-Plugin/skills/<new-skill> "$CACHE"/
+   cp -r /home/daniel/repos/github/ai-agents-and-prompts/ai-claude-plugins/Claude-Israel-Agent-Skills-Plugin/skills/<new-skill> "$CACHE"/
    ```
    If the cache dir for that version doesn't exist, skip the sync and tell Daniel — it means the plugin hasn't been installed from the marketplace at that version yet.
 6. **Commit and push** from the repo root:
